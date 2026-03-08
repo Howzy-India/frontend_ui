@@ -1,4 +1,4 @@
-# frontend_ui
+# howzy
 
 A new Flutter project.
 
