@@ -50,3 +50,17 @@ ios
 web
 
 *.md
+
+# Firebase sensitive files
+firebase-service-account-key.json
+*-service-account-key.json
+
+# Signing keys
+*.keystore
+*.jks
+*.p12
+*.pfx
+
+# iOS signing
+*.mobileprovision
+*.p8
