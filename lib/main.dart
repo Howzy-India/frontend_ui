@@ -12,10 +12,12 @@ import 'features/builders/builder_service.dart';
 import 'features/users/user_management_service.dart';
 
 part 'data/mock_models.dart';
+part 'data/property_data.dart';
 part 'ui/auth_screens.dart';
 part 'ui/dashboards.dart';
 part 'ui/dashboard_views.dart';
 part 'ui/shared_widgets.dart';
+part 'ui/client_landing.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +35,7 @@ Future<void> main() async {
   runApp(HowzyApp(firebaseEnabled: firebaseEnabled));
 }
 
-enum AppView { splash, login, greetings, pilot, partner, admin }
+enum AppView { splash, login, greetings, pilot, partner, admin, clientLanding }
 
 enum UserRole { superAdmin, admin, agent }
 
@@ -88,7 +90,7 @@ class _AppRootState extends State<AppRoot> {
     super.initState();
     Timer(const Duration(seconds: 3), () {
       if (mounted) {
-        setState(() => _view = AppView.login);
+        setState(() => _view = AppView.clientLanding);
       }
     });
 
@@ -101,7 +103,7 @@ class _AppRootState extends State<AppRoot> {
         if (user == null) {
           setState(() {
             _role = null;
-            _view = AppView.login;
+            _view = AppView.clientLanding;
           });
           return;
         }
@@ -143,7 +145,7 @@ class _AppRootState extends State<AppRoot> {
     }
     setState(() {
       _role = null;
-      _view = AppView.login;
+      _view = AppView.clientLanding;
     });
   }
 
@@ -185,6 +187,11 @@ class _AppRootState extends State<AppRoot> {
         ),
         AppView.admin => AdminDashboard(
           key: const ValueKey('admin'),
+          onLogout: _onLogout,
+        ),
+        AppView.clientLanding => ClientLandingScreen(
+          key: const ValueKey('clientLanding'),
+          onLoginClick: () => setState(() => _view = AppView.login),
           onLogout: _onLogout,
         ),
       },
