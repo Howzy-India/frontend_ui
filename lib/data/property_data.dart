@@ -9,14 +9,21 @@ enum PropertyCategory { project, villa, plot, farmland }
 extension PropertyCategoryLabel on PropertyCategory {
   String get label {
     switch (this) {
-      case PropertyCategory.project:
-        return 'Project';
-      case PropertyCategory.villa:
-        return 'Villa';
-      case PropertyCategory.plot:
-        return 'Plot';
-      case PropertyCategory.farmland:
-        return 'Farm Land';
+      case PropertyCategory.project:  return 'Project';
+      case PropertyCategory.villa:    return 'Villa';
+      case PropertyCategory.plot:     return 'Plot';
+      case PropertyCategory.farmland: return 'Farm Land';
+    }
+  }
+
+  static PropertyCategory fromString(String? s) {
+    switch (s?.toLowerCase()) {
+      case 'villa':    return PropertyCategory.villa;
+      case 'plot':     return PropertyCategory.plot;
+      case 'farmland':
+      case 'farm land':
+      case 'farm_land': return PropertyCategory.farmland;
+      default:         return PropertyCategory.project;
     }
   }
 }
@@ -77,6 +84,70 @@ class PropertyListing {
   final bool isNew;
   final bool isTrending;
   final String? mapLink;
+
+  /// Create from a Firestore document snapshot
+  factory PropertyListing.fromFirestore(Map<String, dynamic> data, String id) {
+    List<String> _strings(dynamic v) =>
+        v is List ? v.map((e) => e.toString()).toList() : const [];
+
+    return PropertyListing(
+      id:            id,
+      name:          data['name']          as String? ?? '',
+      developer:     data['developer']     as String? ?? '',
+      category:      PropertyCategoryLabel.fromString(data['category'] as String?),
+      city:          data['city']          as String? ?? '',
+      location:      data['location']      as String? ?? '',
+      price:         data['price']         as String? ?? '',
+      priceRangeKey: data['priceRangeKey'] as String? ?? '',
+      usp:           data['usp']           as String? ?? '',
+      reraNumber:    data['reraNumber']    as String? ?? '',
+      pricePerSqft:  data['pricePerSqft']  as String?,
+      possession:    data['possession']    as String?,
+      segment:       data['segment']       as String?,
+      bhkOptions:    _strings(data['bhkOptions']),
+      bhkKey:        data['bhkKey']        as String?,
+      area:          data['area']          as String?,
+      plotSize:      data['plotSize']      as String?,
+      farmAcres:     data['farmAcres']     as String?,
+      amenities:     _strings(data['amenities']),
+      tags:          _strings(data['tags']),
+      imageUrl:      data['imageUrl']      as String?,
+      gatedCommunity: data['gatedCommunity'] as bool?,
+      approvalType:  data['approvalType']  as String?,
+      isNew:         data['isNew']         as bool? ?? false,
+      isTrending:    data['isTrending']    as bool? ?? false,
+      mapLink:       data['mapLink']       as String?,
+    );
+  }
+
+  /// Convert to Firestore document map
+  Map<String, dynamic> toFirestore() => {
+    'name':          name,
+    'developer':     developer,
+    'category':      category.label,
+    'city':          city,
+    'location':      location,
+    'price':         price,
+    'priceRangeKey': priceRangeKey,
+    'usp':           usp,
+    'reraNumber':    reraNumber,
+    if (pricePerSqft  != null) 'pricePerSqft':  pricePerSqft,
+    if (possession    != null) 'possession':    possession,
+    if (segment       != null) 'segment':       segment,
+    if (bhkOptions    != null) 'bhkOptions':    bhkOptions,
+    if (bhkKey        != null) 'bhkKey':        bhkKey,
+    if (area          != null) 'area':          area,
+    if (plotSize      != null) 'plotSize':      plotSize,
+    if (farmAcres     != null) 'farmAcres':     farmAcres,
+    'amenities':     amenities,
+    'tags':          tags,
+    if (imageUrl      != null) 'imageUrl':      imageUrl,
+    if (gatedCommunity != null) 'gatedCommunity': gatedCommunity,
+    if (approvalType  != null) 'approvalType':  approvalType,
+    'isNew':         isNew,
+    'isTrending':    isTrending,
+    if (mapLink       != null) 'mapLink':       mapLink,
+  };
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

@@ -10,6 +10,7 @@ import 'core/widgets/firebase_setup_banner.dart';
 import 'firebase/firebase_options.dart';
 import 'features/builders/builder_service.dart';
 import 'features/users/user_management_service.dart';
+import 'features/properties/property_service.dart';
 
 part 'data/mock_models.dart';
 part 'data/property_data.dart';

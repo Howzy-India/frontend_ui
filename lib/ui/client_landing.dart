@@ -35,6 +35,8 @@ class ClientLandingScreen extends StatefulWidget {
 }
 
 class _ClientLandingScreenState extends State<ClientLandingScreen> {
+  final _propertyService = PropertyService();
+
   _NavTab _navTab       = _NavTab.home;
   LandingCategory _cat  = LandingCategory.all;
   String _searchQuery   = '';
@@ -51,36 +53,38 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
     super.dispose();
   }
 
-  List<PropertyListing> get _filtered => allProperties.where((p) {
-    switch (_cat) {
-      case LandingCategory.newProjects:
-        if (p.category != PropertyCategory.project) { return false; }
-      case LandingCategory.resaleHomes:
-        if (p.category != PropertyCategory.villa && p.category != PropertyCategory.project) { return false; }
-      case LandingCategory.openPlots:
-        if (p.category != PropertyCategory.plot) { return false; }
-      case LandingCategory.farmLands:
-        if (p.category != PropertyCategory.farmland) { return false; }
-      case LandingCategory.commercial:
-        if (p.category != PropertyCategory.villa) { return false; }
-      case LandingCategory.all:
-        break;
-    }
-    if (_searchQuery.isNotEmpty) {
-      final q = _searchQuery.toLowerCase();
-      if (!p.name.toLowerCase().contains(q) &&
-          !p.location.toLowerCase().contains(q) &&
-          !p.city.toLowerCase().contains(q) &&
-          !p.developer.toLowerCase().contains(q)) { return false; }
-    }
-    if (_locFilter.isNotEmpty &&
-        !p.location.toLowerCase().contains(_locFilter.toLowerCase()) &&
-        !p.city.toLowerCase().contains(_locFilter.toLowerCase())) { return false; }
-    if (_bhkFilter.isNotEmpty && !(p.bhkOptions?.contains(_bhkFilter) ?? false)) return false;
-    if (_priceFilter.isNotEmpty && p.priceRangeKey != _priceFilter) return false;
-    if (_possFilter.isNotEmpty && p.possession != _possFilter) return false;
-    return true;
-  }).toList();
+  List<PropertyListing> _applyFilters(List<PropertyListing> source) {
+    return source.where((p) {
+      switch (_cat) {
+        case LandingCategory.newProjects:
+          if (p.category != PropertyCategory.project) return false;
+        case LandingCategory.resaleHomes:
+          if (p.category != PropertyCategory.villa && p.category != PropertyCategory.project) return false;
+        case LandingCategory.openPlots:
+          if (p.category != PropertyCategory.plot) return false;
+        case LandingCategory.farmLands:
+          if (p.category != PropertyCategory.farmland) return false;
+        case LandingCategory.commercial:
+          if (p.category != PropertyCategory.villa) return false;
+        case LandingCategory.all:
+          break;
+      }
+      if (_searchQuery.isNotEmpty) {
+        final q = _searchQuery.toLowerCase();
+        if (!p.name.toLowerCase().contains(q) &&
+            !p.location.toLowerCase().contains(q) &&
+            !p.city.toLowerCase().contains(q) &&
+            !p.developer.toLowerCase().contains(q)) return false;
+      }
+      if (_locFilter.isNotEmpty &&
+          !p.location.toLowerCase().contains(_locFilter.toLowerCase()) &&
+          !p.city.toLowerCase().contains(_locFilter.toLowerCase())) return false;
+      if (_bhkFilter.isNotEmpty && !(p.bhkOptions?.contains(_bhkFilter) ?? false)) return false;
+      if (_priceFilter.isNotEmpty && p.priceRangeKey != _priceFilter) return false;
+      if (_possFilter.isNotEmpty && p.possession != _possFilter) return false;
+      return true;
+    }).toList();
+  }
 
   void _clearFilters() => setState(() {
     _searchQuery = _locFilter = _priceFilter = _bhkFilter = _possFilter = '';
@@ -89,36 +93,43 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _kSlate50,
-      body: SafeArea(
-        child: Column(
-          children: [
-            _TopNavBar(
-              onLoginClick: widget.onLoginClick,
-              onLogout: widget.onLogout,
-              onSearch: (q) => setState(() {
-                _searchQuery = q;
-                _navTab = _NavTab.projects;
-              }),
+    return StreamBuilder<List<PropertyListing>>(
+      stream: _propertyService.watchProperties(),
+      initialData: allProperties,
+      builder: (context, snapshot) {
+        final properties = snapshot.data ?? allProperties;
+        return Scaffold(
+          backgroundColor: _kSlate50,
+          body: SafeArea(
+            child: Column(
+              children: [
+                _TopNavBar(
+                  onLoginClick: widget.onLoginClick,
+                  onLogout: widget.onLogout,
+                  onSearch: (q) => setState(() {
+                    _searchQuery = q;
+                    _navTab = _NavTab.projects;
+                  }),
+                ),
+                _SecondaryNav(
+                  active: _navTab,
+                  onSelect: (t) => setState(() => _navTab = t),
+                ),
+                Expanded(
+                  child: _navTab == _NavTab.home
+                      ? _buildHomePage(properties)
+                      : _buildProjectsPage(properties),
+                ),
+              ],
             ),
-            _SecondaryNav(
-              active: _navTab,
-              onSelect: (t) => setState(() => _navTab = t),
-            ),
-            Expanded(
-              child: _navTab == _NavTab.home
-                  ? _buildHomePage()
-                  : _buildProjectsPage(),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildHomePage() {
-    final featured = allProperties.take(4).toList();
+  Widget _buildHomePage(List<PropertyListing> properties) {
+    final featured = properties.take(4).toList();
     return LayoutBuilder(builder: (context, constraints) {
       final w = constraints.maxWidth;
       final isMobile  = w < 600;
@@ -227,8 +238,8 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
     });
   }
 
-  Widget _buildProjectsPage() {
-    final props = _filtered;
+  Widget _buildProjectsPage(List<PropertyListing> allProps) {
+    final props = _applyFilters(allProps);
     return LayoutBuilder(builder: (context, constraints) {
       final w = constraints.maxWidth;
       final isMobile = w < 600;
