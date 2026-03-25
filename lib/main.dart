@@ -54,7 +54,7 @@ class HowzyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Howzy Flutter',
+      title: 'Howzy',
       theme: ThemeData(
         useMaterial3: true,
         colorSchemeSeed: const Color(0xFF4F46E5),

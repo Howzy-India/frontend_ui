@@ -384,18 +384,7 @@ class _TopNavBar extends StatelessWidget {
                 height: 60,
                 child: Row(
                   children: [
-                    Container(
-                      width: 32, height: 32,
-                      decoration: BoxDecoration(color: _kIndigoLight, borderRadius: BorderRadius.circular(8)),
-                      child: const Icon(Icons.home_work_rounded, color: _kIndigo, size: 17),
-                    ),
-                    const SizedBox(width: 7),
-                    RichText(
-                      text: TextSpan(children: [
-                        TextSpan(text: 'howzy', style: TextStyle(color: const Color(0xFF111827), fontSize: isMobile ? 15 : 17, fontWeight: FontWeight.w900, letterSpacing: -0.4)),
-                        TextSpan(text: '.in', style: TextStyle(color: _kIndigo, fontSize: isMobile ? 15 : 17, fontWeight: FontWeight.w900, letterSpacing: -0.4)),
-                      ]),
-                    ),
+                    const HowzyLogo(),
                     if (!isMobile) ...[
                       const SizedBox(width: 14),
                       Container(
