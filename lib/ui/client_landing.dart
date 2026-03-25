@@ -282,24 +282,7 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 30, height: 30,
-                decoration: BoxDecoration(color: _kIndigoLight, borderRadius: BorderRadius.circular(7)),
-                child: const Icon(Icons.home_work_rounded, color: _kIndigo, size: 17),
-              ),
-              const SizedBox(width: 8),
-              RichText(
-                text: const TextSpan(
-                  children: [
-                    TextSpan(text: 'howzy', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w900)),
-                    TextSpan(text: '.in', style: TextStyle(color: Color(0xFF818CF8), fontSize: 16, fontWeight: FontWeight.w900)),
-                  ],
-                ),
-              ),
-            ],
-          ),
+          const HowzyLogo(dark: true),
           const SizedBox(height: 10),
           const Text(
             'Connecting you with verified properties across India.\nTransparency, trust, and technology.',
