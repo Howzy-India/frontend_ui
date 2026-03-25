@@ -4,7 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'client_app.dart';
 import 'core/auth/auth_service.dart';
 import 'core/widgets/firebase_setup_banner.dart';
 import 'firebase/firebase_options.dart';
@@ -33,7 +35,7 @@ Future<void> main() async {
     firebaseEnabled = false;
   }
 
-  runApp(HowzyApp(firebaseEnabled: firebaseEnabled));
+  runApp(ProviderScope(child: HowzyApp(firebaseEnabled: firebaseEnabled)));
 }
 
 enum AppView { splash, login, greetings, pilot, partner, admin, clientLanding }
@@ -190,10 +192,9 @@ class _AppRootState extends State<AppRoot> {
           key: const ValueKey('admin'),
           onLogout: _onLogout,
         ),
-        AppView.clientLanding => ClientLandingScreen(
+        AppView.clientLanding => ClientApp(
           key: const ValueKey('clientLanding'),
           onLoginClick: () => setState(() => _view = AppView.login),
-          onLogout: _onLogout,
         ),
       },
     );
