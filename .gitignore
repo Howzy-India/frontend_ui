@@ -18,6 +18,10 @@ migrate_working_dir/
 *.iws
 .idea/
 
+android
+ios
+web
+
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
@@ -44,23 +48,22 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-build/*
-android
-ios
-web
+# Environment & secrets
+.env
+.env.*
+!.env.example
 
-*.md
+# Firebase
+.firebase/
+**/google-services.json
+**/GoogleService-Info.plist
+firebase_options.dart
 
-# Firebase sensitive files
-firebase-service-account-key.json
-*-service-account-key.json
-
-# Signing keys
-*.keystore
+# Credentials & keys
 *.jks
+*.keystore
 *.p12
-*.pfx
-
-# iOS signing
-*.mobileprovision
-*.p8
+*.pem
+*.key
+key.properties
+service-account*.json
