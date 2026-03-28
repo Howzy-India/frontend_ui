@@ -1,7 +1,85 @@
 part of '../main.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
+  late final AnimationController _iconCtrl;
+  late final AnimationController _textCtrl;
+  late final AnimationController _taglineCtrl;
+
+  late final Animation<double> _iconRotation;
+  late final Animation<double> _iconOpacity;
+  late final Animation<double> _iconScale;
+  late final Animation<double> _textOpacity;
+  late final Animation<double> _textWidth;
+  late final Animation<double> _taglineOpacity;
+  late final Animation<Offset> _taglineSlide;
+
+  static const _iconSize = 112.0;
+  static const _fontSize = 76.0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _iconCtrl = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _textCtrl = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+    _taglineCtrl = AnimationController(
+      duration: const Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    _iconRotation = Tween<double>(begin: -1.0, end: 0.0).animate(
+      CurvedAnimation(parent: _iconCtrl, curve: Curves.easeOut),
+    );
+    _iconOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _iconCtrl, curve: Curves.easeOut),
+    );
+    _iconScale = Tween<double>(begin: 0.5, end: 1.0).animate(
+      CurvedAnimation(parent: _iconCtrl, curve: Curves.easeOut),
+    );
+    _textOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _textCtrl, curve: Curves.easeInOut),
+    );
+    _textWidth = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _textCtrl, curve: Curves.easeInOut),
+    );
+    _taglineOpacity = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _taglineCtrl, curve: Curves.easeOut),
+    );
+    _taglineSlide =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+      CurvedAnimation(parent: _taglineCtrl, curve: Curves.easeOut),
+    );
+
+    _iconCtrl.forward();
+    Future.delayed(const Duration(milliseconds: 800), () {
+      if (mounted) _textCtrl.forward();
+    });
+    Future.delayed(const Duration(milliseconds: 1600), () {
+      if (mounted) _taglineCtrl.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _iconCtrl.dispose();
+    _textCtrl.dispose();
+    _taglineCtrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +89,122 @@ class SplashScreen extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xFFEDE9FE), Colors.white, Color(0xFFE0E7FF)],
+            colors: [Color(0xFFF5F0FF), Colors.white, Color(0xFFEEF2FF)],
           ),
         ),
-        child: const Center(child: HowzyLogo(tagline: true, large: true)),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Animated house icon
+                  AnimatedBuilder(
+                    animation: _iconCtrl,
+                    builder: (context, _) => Transform.scale(
+                      scale: _iconScale.value,
+                      child: Transform.rotate(
+                        angle: _iconRotation.value * 3.14159,
+                        child: Opacity(
+                          opacity: _iconOpacity.value,
+                          child: const SizedBox(
+                            width: _iconSize,
+                            height: _iconSize,
+                            child: CustomPaint(
+                              painter: _HowzyMarkPainter(),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  // Animated "howzy.in" text sliding in
+                  AnimatedBuilder(
+                    animation: _textCtrl,
+                    builder: (context, child) => ClipRect(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        widthFactor: _textWidth.value,
+                        child: Opacity(
+                          opacity: _textOpacity.value,
+                          child: child,
+                        ),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: const [
+                          Text(
+                            'howzy',
+                            style: TextStyle(
+                              fontSize: _fontSize,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -2,
+                              color: Color(0xFF0F172A),
+                              height: 1,
+                            ),
+                          ),
+                          SizedBox(width: 4),
+                          Text(
+                            '.in',
+                            style: TextStyle(
+                              fontSize: _fontSize * 0.38,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF4F46E5),
+                              height: 1,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 28),
+              // Animated tagline fading in last
+              AnimatedBuilder(
+                animation: _taglineCtrl,
+                builder: (context, child) => SlideTransition(
+                  position: _taglineSlide,
+                  child: Opacity(
+                    opacity: _taglineOpacity.value,
+                    child: child,
+                  ),
+                ),
+                child: const Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'GROW BIG ',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 4,
+                          color: Color(0xFF64748B),
+                        ),
+                      ),
+                      TextSpan(
+                        text: 'EARN BIG',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          letterSpacing: 4,
+                          color: Color(0xFF4F46E5),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
