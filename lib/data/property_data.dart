@@ -87,7 +87,7 @@ class PropertyListing {
 
   /// Create from a Firestore document snapshot
   factory PropertyListing.fromFirestore(Map<String, dynamic> data, String id) {
-    List<String> _strings(dynamic v) =>
+    List<String> strings(dynamic v) =>
         v is List ? v.map((e) => e.toString()).toList() : const [];
 
     return PropertyListing(
@@ -104,13 +104,13 @@ class PropertyListing {
       pricePerSqft:  data['pricePerSqft']  as String?,
       possession:    data['possession']    as String?,
       segment:       data['segment']       as String?,
-      bhkOptions:    _strings(data['bhkOptions']),
+      bhkOptions:    strings(data['bhkOptions']),
       bhkKey:        data['bhkKey']        as String?,
       area:          data['area']          as String?,
       plotSize:      data['plotSize']      as String?,
       farmAcres:     data['farmAcres']     as String?,
-      amenities:     _strings(data['amenities']),
-      tags:          _strings(data['tags']),
+      amenities:     strings(data['amenities']),
+      tags:          strings(data['tags']),
       imageUrl:      data['imageUrl']      as String?,
       gatedCommunity: data['gatedCommunity'] as bool?,
       approvalType:  data['approvalType']  as String?,

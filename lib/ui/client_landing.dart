@@ -77,11 +77,15 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
         if (!p.name.toLowerCase().contains(q) &&
             !p.location.toLowerCase().contains(q) &&
             !p.city.toLowerCase().contains(q) &&
-            !p.developer.toLowerCase().contains(q)) return false;
+            !p.developer.toLowerCase().contains(q)) {
+          return false;
+        }
       }
       if (_locFilter.isNotEmpty &&
           !p.location.toLowerCase().contains(_locFilter.toLowerCase()) &&
-          !p.city.toLowerCase().contains(_locFilter.toLowerCase())) return false;
+          !p.city.toLowerCase().contains(_locFilter.toLowerCase())) {
+        return false;
+      }
       if (_bhkFilter.isNotEmpty && !(p.bhkOptions?.contains(_bhkFilter) ?? false)) return false;
       if (_priceFilter.isNotEmpty && p.priceRangeKey != _priceFilter) return false;
       if (_possFilter.isNotEmpty && p.possession != _possFilter) return false;
