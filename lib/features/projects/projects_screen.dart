@@ -185,13 +185,13 @@ class _MobileFilterBar extends ConsumerWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
-                _FilterChip2('City', filters.city, propertyCities, notifier.setCity, context),
+                _filterChip2('City', filters.city, propertyCities, notifier.setCity, context),
                 const SizedBox(width: 8),
-                _FilterChip2('Budget', filters.budget, budgetRanges, notifier.setBudget, context),
+                _filterChip2('Budget', filters.budget, budgetRanges, notifier.setBudget, context),
                 const SizedBox(width: 8),
-                _FilterChip2('Type', filters.type, propertyCategories, notifier.setType, context),
+                _filterChip2('Type', filters.type, propertyCategories, notifier.setType, context),
                 const SizedBox(width: 8),
-                _FilterChip2('Move-in', filters.moveIn, moveInOptions, notifier.setMoveIn, context),
+                _filterChip2('Move-in', filters.moveIn, moveInOptions, notifier.setMoveIn, context),
                 if (filters.hasFilters) ...[
                   const SizedBox(width: 8),
                   GestureDetector(
@@ -215,7 +215,7 @@ class _MobileFilterBar extends ConsumerWidget {
     );
   }
 
-  Widget _FilterChip2(String label, String value, List<String> options, ValueChanged<String> onPick, BuildContext ctx) {
+  Widget _filterChip2(String label, String value, List<String> options, ValueChanged<String> onPick, BuildContext ctx) {
     final isActive = value.isNotEmpty;
     return GestureDetector(
       onTap: () async {
