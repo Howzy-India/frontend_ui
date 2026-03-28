@@ -18,9 +18,9 @@ migrate_working_dir/
 *.iws
 .idea/
 
-android
-ios
-web
+# Generated build artifacts (not source code)
+/android/app/debug
+/android/app/profile
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -44,8 +44,6 @@ app.*.symbols
 app.*.map.json
 
 # Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
 /android/app/release
 
 # Environment & secrets

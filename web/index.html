@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Howzy – Grow Big Earn Big">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Howzy">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>Howzy</title>
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { overflow: hidden; }
+
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #f5f0ff 0%, #ffffff 50%, #eef2ff 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease-out;
+    }
+    #splash.fade-out { opacity: 0; pointer-events: none; }
+
+    .splash-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .splash-row {
+      display: flex;
+      align-items: center;
+    }
+    .splash-icon {
+      height: 96px;
+      width: auto;
+      animation: iconIn 0.8s ease-out forwards;
+    }
+    @media (min-width: 768px) { .splash-icon { height: 128px; } }
+
+    .splash-text {
+      overflow: hidden;
+      display: flex;
+      align-items: baseline;
+      margin-left: 16px;
+      max-width: 0;
+      opacity: 0;
+      animation: textIn 0.8s 0.8s ease-in-out forwards;
+      white-space: nowrap;
+    }
+    .splash-howzy {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 60px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: #0f172a;
+      line-height: 1;
+    }
+    @media (min-width: 768px) { .splash-howzy { font-size: 80px; } }
+    .splash-dot-in {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #4f46e5;
+      margin-left: 4px;
+      line-height: 1;
+    }
+    @media (min-width: 768px) { .splash-dot-in { font-size: 30px; } }
+
+    .splash-tagline {
+      margin-top: 24px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: taglineIn 0.8s 1.6s ease-out forwards;
+    }
+    @media (min-width: 768px) { .splash-tagline { font-size: 20px; } }
+    .splash-tagline .muted { color: #64748b; }
+    .splash-tagline .accent { color: #4f46e5; }
+
+    @keyframes iconIn {
+      from { transform: rotate(-180deg) scale(0.5); opacity: 0; }
+      to   { transform: rotate(0deg)    scale(1);   opacity: 1; }
+    }
+    @keyframes textIn {
+      from { opacity: 0; max-width: 0;    }
+      to   { opacity: 1; max-width: 600px; }
+    }
+    @keyframes taglineIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+  </style>
+</head>
+<body>
+  <!-- Loading splash shown while Flutter engine initialises -->
+  <div id="splash">
+    <div class="splash-content">
+      <div class="splash-row">
+        <svg class="splash-icon" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="howzyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#c084fc"/>
+              <stop offset="100%" stop-color="#4f46e5"/>
+            </linearGradient>
+          </defs>
+          <path d="M 20 70 L 20 40 L 50 15 L 80 40 L 80 90"
+                stroke="url(#howzyGrad)" stroke-width="14"
+                stroke-linecap="butt" stroke-linejoin="miter"/>
+          <rect x="42" y="52" width="6" height="6" fill="#0f172a"/>
+          <rect x="52" y="52" width="6" height="6" fill="#0f172a"/>
+          <rect x="42" y="62" width="6" height="6" fill="#0f172a"/>
+          <rect x="52" y="62" width="6" height="6" fill="#0f172a"/>
+        </svg>
+        <div class="splash-text">
+          <span class="splash-howzy">howzy</span>
+          <span class="splash-dot-in">.in</span>
+        </div>
+      </div>
+      <div class="splash-tagline">
+        <span class="muted">GROW BIG </span><span class="accent">EARN BIG</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var splash = document.getElementById('splash');
+      if (splash) {
+        splash.classList.add('fade-out');
+        setTimeout(function () {
+          if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
+          document.body.style.overflow = '';
+        }, 600);
+      }
+    });
+  </script>
+</body>
+</html>
