@@ -226,11 +226,11 @@ class _PropertyImage extends StatelessWidget {
     return CachedNetworkImage(
       imageUrl: property.imageUrl!,
       fit: BoxFit.cover,
-      placeholder: (_, __) => Container(
+      placeholder: (_, _) => Container(
         color: property.categoryColor,
         child: Center(child: Icon(property.categoryIcon, size: 40, color: property.categoryTextColor.withValues(alpha: 0.3))),
       ),
-      errorWidget: (_, __, ___) => Container(
+      errorWidget: (_, _, _) => Container(
         color: property.categoryColor,
         child: Center(child: Icon(property.categoryIcon, size: 40, color: property.categoryTextColor.withValues(alpha: 0.4))),
       ),

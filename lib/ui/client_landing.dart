@@ -1595,6 +1595,7 @@ class _FeatureCard extends StatelessWidget {
 
 // ─── Search + Filter Bar (Projects tab) ───────────────────────────────────────
 
+// ignore: unused_element
 class _SearchFilterBar extends StatelessWidget {
   const _SearchFilterBar({
     required this.controller,

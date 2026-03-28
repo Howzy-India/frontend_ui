@@ -177,7 +177,7 @@ class _HeroSectionState extends State<_HeroSection> with SingleTickerProviderSta
                   'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=1200&q=80',
                   fit: BoxFit.cover,
                   height: heroH + 80,
-                  errorBuilder: (_, __, ___) => Container(
+                  errorBuilder: (_, _, _) => Container(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight,
                         colors: [Color(0xFF1E3A5F), Color(0xFF0F1928)]),
@@ -482,7 +482,7 @@ class _TrendingLocationsSection extends StatelessWidget {
                       Image.network(
                         loc.$3,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
+                        errorBuilder: (_, _, _) => Container(
                           decoration: const BoxDecoration(
                             gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight,
                               colors: [Color(0xFF334155), Color(0xFF1E293B)]),
@@ -561,7 +561,7 @@ class _TrendingProjectsSection extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: isMobile ? 20 : 48),
                 itemCount: _projects.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 16),
+                separatorBuilder: (_, _) => const SizedBox(width: 16),
                 itemBuilder: (ctx, i) {
                   final proj = _projects[i];
                   return SizedBox(
@@ -580,7 +580,7 @@ class _TrendingProjectsSection extends StatelessWidget {
                                   Image.network(
                                     proj.$3,
                                     fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => Container(color: AppColors.slate200),
+                                    errorBuilder: (_, _, _) => Container(color: AppColors.slate200),
                                   ),
                                   Container(
                                     decoration: const BoxDecoration(
@@ -746,7 +746,7 @@ class _TestimonialsSection extends StatelessWidget {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: _testimonials.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 20),
+                      separatorBuilder: (_, _) => const SizedBox(width: 20),
                       itemBuilder: (ctx, i) => SizedBox(width: 320, child: _TestimonialCard(t: _testimonials[i])),
                     ),
                   ),
@@ -849,53 +849,6 @@ class _HomeFooter extends StatelessWidget {
   ];
 }
 
-// ─── Shared Section Header ────────────────────────────────────────────────────
-class _SectionHeader extends StatelessWidget {
-  const _SectionHeader({required this.title, this.eyebrow, this.subtitle, this.light = false, this.action});
-  final String title;
-  final String? eyebrow, subtitle;
-  final bool light;
-  final Widget? action;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (eyebrow != null) ...[
-          Text(
-            eyebrow!,
-            style: TextStyle(
-              fontSize: 10, fontWeight: FontWeight.w900, letterSpacing: 2,
-              color: light ? AppColors.indigo400 : AppColors.indigo600,
-            ),
-          ),
-          const SizedBox(height: 8),
-        ],
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Expanded(
-              child: Text(
-                title,
-                style: TextStyle(
-                  fontSize: 28, fontWeight: FontWeight.w900, color: light ? Colors.white : AppColors.slate900,
-                  height: 1.15, letterSpacing: -0.5,
-                ),
-              ),
-            ),
-            ?action,
-          ],
-        ),
-        if (subtitle != null) ...[
-          const SizedBox(height: 8),
-          Text(subtitle!, style: TextStyle(fontSize: 15, color: light ? AppColors.slate400 : AppColors.slate500, height: 1.5)),
-        ],
-      ],
-    );
-  }
-}
-
 // ─── Glowing animated blob ─────────────────────────────────────────────────────
 class _GlowBlob extends StatefulWidget {
   const _GlowBlob({required this.color, required this.size, this.delay = 0});
@@ -923,7 +876,7 @@ class _GlowBlobState extends State<_GlowBlob> with SingleTickerProviderStateMixi
   Widget build(BuildContext context) {
     return AnimatedBuilder(
       animation: _ctrl,
-      builder: (_, __) {
+      builder: (_, _) {
         final t = Curves.easeInOut.transform(_ctrl.value);
         return Transform.scale(
           scale: 1.0 + 0.1 * t,
