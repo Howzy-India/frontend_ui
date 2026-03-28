@@ -315,19 +315,18 @@ class _ClientLandingScreenState extends State<ClientLandingScreen> {
         onSave: () => setState(() => _savedIds.contains(p.id) ? _savedIds.remove(p.id) : _savedIds.add(p.id)),
         onEnquire: () {
           Navigator.pop(ctx);
-          final rootCtx = context;
-          // ignore: use_build_context_synchronously
+          final navigator = Navigator.of(context);
           Future.delayed(Duration.zero, () {
             if (mounted) {
-              // ignore: use_build_context_synchronously
-              showModalBottomSheet(
-                context: rootCtx,
-                isScrollControlled: true,
-                useSafeArea: true,
-                backgroundColor: Colors.transparent,
-                builder: (_) => _EnquirySheet(
-                  property: p,
-                  onLoginClick: widget.onLoginClick,
+              navigator.push(
+                ModalBottomSheetRoute(
+                  isScrollControlled: true,
+                  useSafeArea: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (_) => _EnquirySheet(
+                    property: p,
+                    onLoginClick: widget.onLoginClick,
+                  ),
                 ),
               );
             }
